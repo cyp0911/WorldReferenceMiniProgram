@@ -1,0 +1,185 @@
+<view class="page">
+  <!-- 顶部标题栏 -->
+  <view class="header bg-blue-600 text-white">
+    <view class="container">
+      <view class="py-4">
+        <view class="text-xl font-bold text-center">世界参考消息</view>
+        <view class="text-sm text-blue-100 text-center mt-1">全球实时消息追踪</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计信息栏 -->
+  <view class="container">
+    <view class="card card-shadow mt-4">
+      <view class="flex justify-between items-center">
+        <view class="flex items-center">
+          <view class="bg-blue-100 rounded-full p-2 mr-3">
+            <text class="text-blue-600 font-bold">今日</text>
+          </view>
+          <view>
+            <view class="text-sm text-gray-600">新增消息</view>
+            <view class="text-xl font-bold text-blue-600">{{todayUnreadCount}}</view>
+          </view>
+        </view>
+        <view class="flex items-center">
+          <view class="bg-green-100 rounded-full p-2 mr-3">
+            <text class="text-green-600 font-bold">全球</text>
+          </view>
+          <view>
+            <view class="text-sm text-gray-600">覆盖国家</view>
+            <view class="text-xl font-bold text-green-600">{{countryCount}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 世界地图容器 -->
+  <view class="container mt-4">
+    <view class="card card-shadow p-4">
+      <view class="map-container relative">
+        <!-- 世界地图背景 -->
+        <view class="world-map relative">
+          <!-- 简化的世界地图轮廓 -->
+          <view class="map-outline">
+            <!-- 北美洲 -->
+            <view class="continent continent-north-america"></view>
+            <!-- 南美洲 -->
+            <view class="continent continent-south-america"></view>
+            <!-- 欧洲 -->
+            <view class="continent continent-europe"></view>
+            <!-- 非洲 -->
+            <view class="continent continent-africa"></view>
+            <!-- 亚洲 -->
+            <view class="continent continent-asia"></view>
+            <!-- 大洋洲 -->
+            <view class="continent continent-oceania"></view>
+          </view>
+          
+          <!-- 国家标记层 -->
+          <view class="markers-layer">
+            <view
+              class="country-marker"
+              wx:for="{{countries}}"
+              wx:key="id"
+              data-country="{{item}}"
+              bindtap="onCountryTap"
+              style="left: {{item.position.x}}%; top: {{item.position.y}}%;"
+            >
+              <!-- 脉冲动画圆圈 -->
+              <view class="ping-animation absolute w-8 h-8 bg-blue-400 rounded-full opacity-75" wx:if="{{item.unreadCount > 0}}"></view>
+              <!-- 主标记点 -->
+              <view class="marker-dot bg-blue-600 rounded-full w-8 h-8 flex items-center justify-center shadow-md">
+                <text class="text-white text-xs font-bold">{{item.unreadCount}}</text>
+              </view>
+              <!-- 悬停提示 -->
+              <view class="marker-tooltip absolute bg-gray-800 text-white text-xs px-2 py-1 rounded mt-1 whitespace-nowrap opacity-0 transition-opacity" style="top: 100%; left: 50%; transform: translateX(-50%);">
+                {{item.flag}} {{item.name}}
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 国家/地区列表 -->
+  <view class="container mt-4 mb-20">
+    <view class="mb-3">
+      <view class="text-lg font-semibold text-gray-900">国家列表</view>
+      <view class="text-sm text-gray-600">按未读数量排序</view>
+    </view>
+    
+    <view class="space-y-3">
+      <view
+        class="card shadow-sm"
+        wx:for="{{sortedCountries}}"
+        wx:key="id"
+        bindtap="onCountryTap"
+        data-country="{{item}}"
+      >
+        <view class="flex items-center justify-between">
+          <view class="flex items-center flex-1">
+            <!-- 国旗 -->
+            <view class="text-2xl mr-3">{{item.flag}}</view>
+            <!-- 国家信息 -->
+            <view class="flex-1">
+              <view class="font-semibold text-gray-900">{{item.name}}</view>
+              <view class="text-sm text-gray-600">{{item.unreadCount}} 条未读消息</view>
+            </view>
+          </view>
+          <!-- 未读数量标签 -->
+          <view class="bg-blue-600 text-white rounded-full px-3 py-1 min-w-[60rpx] text-center">
+            <text class="text-sm font-bold">{{item.unreadCount}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 新闻列表弹窗 -->
+  <view class="modal-overlay fixed inset-0 bg-black bg-opacity-50 z-50" wx:if="{{showNewsModal}}" bindtap="closeNewsModal">
+    <view class="modal-content fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl animate-slide-up" catchtap="stopPropagation">
+      <!-- 弹窗头部 -->
+      <view class="sticky top-0 bg-white border-b border-gray-200 px-4 py-3 z-10">
+        <view class="flex items-center justify-between">
+          <view class="flex items-center">
+            <text class="text-2xl mr-2" wx:if="{{selectedCountry}}">{{selectedCountry.flag}}</text>
+            <view>
+              <view class="text-lg font-semibold text-gray-900" wx:if="{{selectedCountry}}">{{selectedCountry.name}}</view>
+              <view class="text-sm text-gray-600">今日 {{filteredNews.length}} 条消息</view>
+            </view>
+          </view>
+          <view class="text-gray-400 text-xl" bindtap="closeNewsModal">×</view>
+        </view>
+        
+        <!-- 分类筛选 -->
+        <view class="flex space-x-2 mt-3 overflow-x-auto">
+          <view 
+            class="category-tag {{selectedCategory === '全部' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}}"
+            wx:for="{{categories}}"
+            wx:key="*this"
+            bindtap="selectCategory"
+            data-category="{{item}}"
+          >
+            {{item}}
+          </view>
+        </view>
+      </view>
+      
+      <!-- 新闻列表 -->
+      <scroll-view class="news-list px-4 py-3 max-h-[70vh]" scroll-y>
+        <view 
+          class="news-card mb-4 pb-4 border-b border-gray-100 last:border-0"
+          wx:for="{{filteredNews}}"
+          wx:key="id"
+          bindtap="openNewsDetail"
+          data-news="{{item}}"
+        >
+          <!-- 第一行：媒体信息 -->
+          <view class="flex items-center justify-between mb-2">
+            <view class="flex items-center">
+              <text class="text-lg mr-2">{{item.sourceLogo}}</text>
+              <text class="text-sm text-gray-700">{{item.source}}</text>
+              <text class="text-sm text-gray-500 ml-2">{{item.time}}</text>
+            </view>
+            <view class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded">{{item.category}}</view>
+          </view>
+          
+          <!-- 第二行：新闻标题 -->
+          <view class="text-gray-900 font-medium mb-2 line-clamp-2">{{item.title}}</view>
+          
+          <!-- 第三行：缩略图 + 阅读信息 -->
+          <view class="flex items-center justify-between">
+            <view class="flex items-center space-x-4">
+              <text class="text-sm text-gray-500">👁 {{item.views}}</text>
+              <text class="text-sm text-gray-500">⭐ {{item.saved ? '已收藏' : '收藏'}}</text>
+            </view>
+            <image wx:if="{{item.image}}" src="{{item.image}}" class="w-16 h-12 rounded object-cover" />
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,170 @@
+<view class="page">
+  <!-- 顶部用户卡片 -->
+  <view class="profile-header bg-gradient-to-br text-white">
+    <view class="container">
+      <view class="py-8">
+        <!-- 用户头像 -->
+        <view class="text-center mb-4">
+          <view class="avatar-container">
+            <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+            <view class="avatar-edit">
+              <text class="text-xs">编辑</text>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 用户信息 -->
+        <view class="text-center">
+          <view class="text-xl font-bold mb-1">{{userInfo.nickname}}</view>
+          <view class="text-sm text-blue-100">{{userInfo.signature || '这个人很懒，什么都没写'}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 统计卡片 -->
+  <view class="container">
+    <view class="stats-card bg-white rounded-lg shadow-md mx-4 -mt-8 p-4 relative z-10">
+      <view class="grid-cols-3 text-center">
+        <view class="stat-item">
+          <view class="text-lg font-bold text-blue-600">{{stats.readCount}}</view>
+          <view class="text-xs text-gray-600">已读</view>
+        </view>
+        <view class="stat-item">
+          <view class="text-lg font-bold text-yellow-500">{{stats.savedCount}}</view>
+          <view class="text-xs text-gray-600">收藏</view>
+        </view>
+        <view class="stat-item">
+          <view class="text-lg font-bold text-green-600">{{stats.followCount}}</view>
+          <view class="text-xs text-gray-600">关注</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 偏好设置组 -->
+  <view class="container mt-6">
+    <view class="settings-group">
+      <view class="settings-group-title">
+        <text class="text-gray-900 font-semibold">偏好设置</text>
+      </view>
+      
+      <!-- 关注的国家/地区 -->
+      <view class="settings-item" bindtap="openCountriesSettings">
+        <view class="flex items-center">
+          <view class="settings-icon text-blue-500">🌍</view>
+          <view class="flex-1">
+            <view class="settings-title">关注的国家/地区</view>
+            <view class="settings-desc">{{followedCountries.length}} 个关注</view>
+          </view>
+          <view class="settings-arrow">›</view>
+        </view>
+      </view>
+      
+      <!-- 感兴趣的分类 -->
+      <view class="settings-item" bindtap="openCategoriesSettings">
+        <view class="flex items-center">
+          <view class="settings-icon text-green-500">📚</view>
+          <view class="flex-1">
+            <view class="settings-title">感兴趣的分类</view>
+            <view class="settings-desc">{{interestedCategories.length}} 个分类</view>
+          </view>
+          <view class="settings-arrow">›</view>
+        </view>
+      </view>
+      
+      <!-- 语言设置 -->
+      <view class="settings-item" bindtap="openLanguageSettings">
+        <view class="flex items-center">
+          <view class="settings-icon text-purple-500">🌐</view>
+          <view class="flex-1">
+            <view class="settings-title">语言设置</view>
+            <view class="settings-desc">{{currentLanguage}}</view>
+          </view>
+          <view class="settings-arrow">›</view>
+        </view>
+      </view>
+      
+      <!-- 推送通知 -->
+      <view class="settings-item" bindtap="toggleNotification">
+        <view class="flex items-center">
+          <view class="settings-icon text-red-500">🔔</view>
+          <view class="flex-1">
+            <view class="settings-title">推送通知</view>
+            <view class="settings-desc">{{settings.notification ? '已开启' : '已关闭'}}</view>
+          </view>
+          <switch 
+            class="settings-switch" 
+            checked="{{settings.notification}}"
+            color="#2563eb"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 通用设置组 -->
+    <view class="settings-group mt-6">
+      <view class="settings-group-title">
+        <text class="text-gray-900 font-semibold">通用设置</text>
+      </view>
+      
+      <!-- 深色模式 -->
+      <view class="settings-item" bindtap="toggleDarkMode">
+        <view class="flex items-center">
+          <view class="settings-icon text-gray-700">🌙</view>
+          <view class="flex-1">
+            <view class="settings-title">深色模式</view>
+            <view class="settings-desc">{{settings.darkMode ? '已开启' : '已关闭'}}</view>
+          </view>
+          <switch 
+            class="settings-switch" 
+            checked="{{settings.darkMode}}"
+            color="#2563eb"
+          />
+        </view>
+      </view>
+      
+      <!-- 隐私政策 -->
+      <view class="settings-item" bindtap="openPrivacyPolicy">
+        <view class="flex items-center">
+          <view class="settings-icon text-orange-500">🔒</view>
+          <view class="flex-1">
+            <view class="settings-title">隐私政策</view>
+            <view class="settings-desc">查看隐私保护条款</view>
+          </view>
+          <view class="settings-arrow">›</view>
+        </view>
+      </view>
+      
+      <!-- 帮助与反馈 -->
+      <view class="settings-item" bindtap="openHelp">
+        <view class="flex items-center">
+          <view class="settings-icon text-cyan-500">❓</view>
+          <view class="flex-1">
+            <view class="settings-title">帮助与反馈</view>
+            <view class="settings-desc">使用帮助和意见反馈</view>
+          </view>
+          <view class="settings-arrow">›</view>
+        </view>
+      </view>
+      
+      <!-- 更多设置 -->
+      <view class="settings-item" bindtap="openMoreSettings">
+        <view class="flex items-center">
+          <view class="settings-icon text-indigo-500">⚙️</view>
+          <view class="flex-1">
+            <view class="settings-title">更多设置</view>
+            <view class="settings-desc">高级设置选项</view>
+          </view>
+          <view class="settings-arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 版本信息 -->
+    <view class="version-info text-center py-8">
+      <view class="text-gray-600 text-sm mb-2">版本 {{appVersion}}</view>
+      <view class="text-gray-400 text-xs">© 2024 世界参考消息</view>
+    </view>
+  </view>
+</view>

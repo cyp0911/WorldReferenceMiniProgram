@@ -1,0 +1,106 @@
+/**detail.wxss - 详情页面样式**/
+.detail-page {
+  background-color: var(--white);
+  min-height: 100vh;
+}
+
+/* 加载状态 */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400rpx;
+}
+
+.loading-text {
+  font-family: 'PingFang SC';
+  font-size: 28rpx;
+  color: var(--text-tertiary);
+}
+
+/* 文章内容 */
+.article-content {
+  padding: var(--spacing-sm);
+}
+
+/* 文章头部 */
+.article-header {
+  margin-bottom: var(--spacing-md);
+}
+
+.article-title {
+  font-family: 'PingFang SC';
+  font-weight: 600;
+  font-size: 40rpx;
+  color: var(--text-primary);
+  line-height: 1.4;
+  margin-bottom: var(--spacing-sm);
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  font-family: 'PingFang SC';
+  font-size: 24rpx;
+  color: var(--text-tertiary);
+}
+
+.article-source {
+  color: var(--primary-color);
+}
+
+/* 文章正文 */
+.article-body {
+  margin-bottom: var(--spacing-xl);
+}
+
+.article-text {
+  font-family: 'PingFang SC';
+  font-size: 30rpx;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  display: block;
+}
+
+.article-images {
+  margin-top: var(--spacing-md);
+}
+
+.article-image {
+  width: 100%;
+  border-radius: var(--border-radius-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* 操作按钮 */
+.article-actions {
+  display: flex;
+  justify-content: space-around;
+  padding: var(--spacing-md) 0;
+  border-top: 1rpx solid var(--border-color);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--white);
+  padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
+}
+
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.action-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.action-text {
+  font-family: 'PingFang SC';
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}

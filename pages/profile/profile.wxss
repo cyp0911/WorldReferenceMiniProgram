@@ -1,0 +1,273 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--gray-50);
+}
+
+/* 顶部用户卡片 */
+.profile-header {
+  background: linear-gradient(135deg, var(--blue-500) 0%, var(--blue-600) 100%);
+  padding-bottom: 80rpx;
+}
+
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 80rpx;
+  border: 6rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.avatar-edit {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+}
+
+/* 统计卡片 */
+.stats-card {
+  margin-top: -64rpx;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+.stat-item {
+  padding: 20rpx 0;
+}
+
+/* 设置组 */
+.settings-group {
+  background-color: white;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.settings-group-title {
+  padding: 32rpx 32rpx 16rpx;
+  background-color: var(--gray-50);
+  border-bottom: 1rpx solid var(--gray-200);
+}
+
+.settings-item {
+  padding: 32rpx;
+  border-bottom: 1rpx solid var(--gray-100);
+  transition: background-color 0.15s ease-in-out;
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-item:active {
+  background-color: var(--gray-50);
+}
+
+/* 设置项内容 */
+.settings-icon {
+  width: 80rpx;
+  height: 80rpx;
+  font-size: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.settings-title {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: var(--gray-900);
+  margin-bottom: 8rpx;
+}
+
+.settings-desc {
+  font-size: 24rpx;
+  color: var(--gray-600);
+}
+
+.settings-arrow {
+  font-size: 40rpx;
+  color: var(--gray-400);
+  font-weight: 300;
+}
+
+.settings-switch {
+  transform: scale(0.8);
+}
+
+/* 网格布局 */
+.grid-cols-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+}
+
+/* 版本信息 */
+.version-info {
+  margin-top: 60rpx;
+  padding: 0 32rpx;
+}
+
+/* 动画效果 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.settings-group {
+  animation: fadeInUp 0.4s ease-out;
+}
+
+.settings-group:nth-child(1) { animation-delay: 0.1s; }
+.settings-group:nth-child(2) { animation-delay: 0.2s; }
+
+/* 主题色定义 */
+.text-blue-500 { color: var(--blue-500); }
+.text-blue-600 { color: var(--blue-600); }
+.text-green-500 { color: var(--green-500); }
+.text-green-600 { color: var(--green-600); }
+.text-yellow-500 { color: var(--yellow-500); }
+.text-purple-500 { color: var(--purple-500); }
+.text-red-500 { color: var(--red-500); }
+.text-gray-400 { color: var(--gray-400); }
+.text-gray-500 { color: var(--gray-500); }
+.text-gray-600 { color: var(--gray-600); }
+.text-gray-700 { color: var(--gray-700); }
+.text-gray-900 { color: var(--gray-900); }
+.text-orange-500 { color: var(--orange-500); }
+.text-cyan-500 { color: var(--cyan-500); }
+.text-indigo-500 { color: var(--indigo-500); }
+
+.bg-blue-500 { background-color: var(--blue-500); }
+.bg-blue-600 { background-color: var(--blue-600); }
+.bg-blue-100 { background-color: var(--blue-100); }
+.bg-gray-50 { background-color: var(--gray-50); }
+.bg-white { background-color: white; }
+
+.text-blue-100 { color: rgba(255, 255, 255, 0.8); }
+
+/* 响应式优化 */
+@media (max-width: 375px) {
+  .avatar {
+    width: 140rpx;
+    height: 140rpx;
+    border-radius: 70rpx;
+  }
+  
+  .settings-item {
+    padding: 24rpx;
+  }
+  
+  .settings-icon {
+    width: 64rpx;
+    height: 64rpx;
+    font-size: 40rpx;
+    margin-right: 16rpx;
+  }
+  
+  .settings-title {
+    font-size: 28rpx;
+  }
+  
+  .settings-desc {
+    font-size: 22rpx;
+  }
+}
+
+/* 交互效果 */
+.settings-item-tap {
+  background-color: var(--gray-50);
+}
+
+.switch-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* 渐变背景 */
+.bg-gradient-to-br {
+  background: linear-gradient(135deg, var(--blue-500), var(--blue-700));
+}
+
+/* 阴影效果 */
+.shadow-md {
+  box-shadow: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+}
+
+/* Flexbox 辅助类 */
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* 间距辅助类 */
+.mb-1 { margin-bottom: 8rpx; }
+.mb-2 { margin-bottom: 16rpx; }
+.mb-4 { margin-bottom: 32rpx; }
+.mr-2 { margin-right: 16rpx; }
+.mr-3 { margin-right: 24rpx; }
+.py-8 { padding-top: 64rpx; padding-bottom: 64rpx; }
+.py-4 { padding-top: 32rpx; padding-bottom: 32rpx; }
+.py-2 { padding-top: 16rpx; padding-bottom: 16rpx; }
+.px-6 { padding-left: 48rpx; padding-right: 48rpx; }
+.px-4 { padding-left: 32rpx; padding-right: 32rpx; }
+.p-4 { padding: 32rpx; }
+.mt-6 { margin-top: 48rpx; }
+.mt-8 { margin-top: 64rpx; }
+
+/* 字体辅助类 */
+.text-xs { font-size: 20rpx; }
+.text-sm { font-size: 24rpx; }
+.text-base { font-size: 28rpx; }
+.text-lg { font-size: 32rpx; }
+.text-xl { font-size: 36rpx; }
+.text-2xl { font-size: 40rpx; }
+
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* 圆角辅助类 */
+.rounded-lg { border-radius: 16rpx; }
+.rounded-full { border-radius: 9999rpx; }
+
+/* 相对定位 */
+.relative { position: relative; }
+.z-10 { z-index: 10; }
+
+/* 边框辅助类 */
+.border-b { border-bottom-width: 1rpx; }
+.border-gray-100 { border-color: var(--gray-100); }
+.border-gray-200 { border-color: var(--gray-200); }

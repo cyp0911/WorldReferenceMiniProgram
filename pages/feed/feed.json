@@ -1,0 +1,6 @@
+{
+  "usingComponents": {},
+  "navigationBarTitleText": "全球动态",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
+}

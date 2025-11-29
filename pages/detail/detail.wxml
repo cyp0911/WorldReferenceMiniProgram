@@ -1,0 +1,53 @@
+<!--detail.wxml - 新闻详情页面-->
+<view class="detail-page">
+  <!-- 加载状态 -->
+  <view class="loading" wx:if="{{loading}}">
+    <view class="loading-text">加载中...</view>
+  </view>
+
+  <!-- 文章内容 -->
+  <view class="article-content" wx:else>
+    <!-- 标题区域 -->
+    <view class="article-header">
+      <view class="article-title">{{articleData.title}}</view>
+      <view class="article-meta">
+        <text class="article-source">{{articleData.source}}</text>
+        <text class="article-author">{{articleData.author}}</text>
+        <text class="article-time">{{articleData.publishTime}}</text>
+        <text class="article-read">{{articleData.readCount}}阅读</text>
+      </view>
+    </view>
+
+    <!-- 文章正文 -->
+    <view class="article-body">
+      <text class="article-text">{{articleData.content}}</text>
+      
+      <!-- 文章图片 -->
+      <view class="article-images" wx:if="{{articleData.images.length > 0}}">
+        <image 
+          wx:for="{{articleData.images}}" 
+          wx:key="*this" 
+          src="{{item}}" 
+          mode="widthFix"
+          class="article-image"
+        ></image>
+      </view>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="article-actions">
+      <view class="action-btn" bindtap="onCollectTap">
+        <image class="action-icon" src="/images/collect.png" mode="aspectFit"></image>
+        <text class="action-text">收藏</text>
+      </view>
+      <view class="action-btn" bindtap="onLikeTap">
+        <image class="action-icon" src="/images/like.png" mode="aspectFit"></image>
+        <text class="action-text">点赞</text>
+      </view>
+      <view class="action-btn">
+        <image class="action-icon" src="/images/share.png" mode="aspectFit"></image>
+        <text class="action-text">分享</text>
+      </view>
+    </view>
+  </view>
+</view>

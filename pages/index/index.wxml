@@ -1,0 +1,277 @@
+<view class="page">
+  <!-- 顶部标题栏 -->
+  <view class="header">
+    <view class="container">
+      <view class="py-4">
+        <view class="text-xl font-bold text-center">{{pageTitle}}</view>
+        <view class="text-sm text-blue-100 text-center mt-1">{{pageSubtitle}}</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主内容区域 -->
+  <view class="content-area" style="padding-bottom: 140rpx;">
+    <!-- 地图页面内容 -->
+    <view wx:if="{{activeTab === 'map'}}" class="tab-content">
+      <!-- 统计信息栏 -->
+      <view class="container">
+        <view class="card card-shadow mt-4">
+          <view class="flex justify-between items-center">
+            <view class="flex items-center">
+              <view class="bg-blue-100 rounded-full p-2 mr-3">
+                <text class="text-blue-600 font-bold">今日</text>
+              </view>
+              <view>
+                <view class="text-sm text-gray-600">新增消息</view>
+                <view class="text-xl font-bold text-blue-600">{{todayUnreadCount}}</view>
+              </view>
+            </view>
+            <view class="flex items-center">
+              <view class="bg-green-100 rounded-full p-2 mr-3">
+                <text class="text-green-600 font-bold">全球</text>
+              </view>
+              <view>
+                <view class="text-sm text-gray-600">覆盖国家</view>
+                <view class="text-xl font-bold text-green-600">{{countryCount}}</view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 世界地图容器 -->
+      <view class="container mt-4">
+        <view class="card card-shadow p-4">
+          <view class="map-container" style="--map-scale: {{mapScale}};">
+            <!-- 缩放控制按钮 -->
+            <view class="zoom-controls">
+              <view class="zoom-btn zoom-in" bindtap="zoomIn">
+                <text>+</text>
+              </view>
+              <view class="zoom-btn zoom-out" bindtap="zoomOut">
+                <text>-</text>
+              </view>
+              <view class="zoom-btn zoom-reset" bindtap="zoomReset">
+                <text>⟲</text>
+              </view>
+            </view>
+            
+            <!-- 世界地图背景和标记层容器 -->
+            <view 
+              class="map-content" 
+              style="transform: scale({{mapScale}}) translate({{mapTranslateX}}rpx, {{mapTranslateY}}rpx);"
+              bindtouchstart="onMapTouchStart"
+              bindtouchmove="onMapTouchMove"
+              bindtouchend="onMapTouchEnd"
+            >
+              <!-- 世界地图背景 -->
+              <view class="world-map">
+                <!-- 简化的世界地图轮廓 -->
+                <view class="map-outline">
+                  <!-- 北美洲 -->
+                  <view class="continent continent-north-america"></view>
+                  <!-- 南美洲 -->
+                  <view class="continent continent-south-america"></view>
+                  <!-- 欧洲 -->
+                  <view class="continent continent-europe"></view>
+                  <!-- 非洲 -->
+                  <view class="continent continent-africa"></view>
+                  <!-- 亚洲 -->
+                  <view class="continent continent-asia"></view>
+                  <!-- 大洋洲 -->
+                  <view class="continent continent-oceania"></view>
+                </view>
+                
+                <!-- 世界地图图标 -->
+                <view class="world-map-icon">🌍</view>
+              </view>
+              
+              <!-- 国家标记层 -->
+              <view class="markers-layer">
+                <view
+                  class="country-marker"
+                  wx:for="{{countries}}"
+                  wx:key="id"
+                  bindtap="onCountryTap"
+                  bindtouchstart="onMarkerTouchStart"
+                  bindtouchend="onMarkerTouchEnd"
+                  data-country="{{item}}"
+                  data-index="{{index}}"
+                  style="left: {{item.position.x}}%; top: {{item.position.y}}%;"
+                >
+                  <!-- 脉冲动画圆圈 -->
+                  <view class="ping-animation marker-pulse" wx:if="{{item.unreadCount > 0}}"></view>
+                  <!-- 主标记点 -->
+                  <view class="marker-dot">
+                    <text style="color: white; font-size: 24rpx; font-weight: bold;">{{item.unreadCount}}</text>
+                  </view>
+                  <!-- 悬停提示 -->
+                  <view class="marker-tooltip">
+                    {{item.flag}} {{item.name}}
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- 国家/地区列表 -->
+      <view class="container mt-4 mb-20">
+        <view class="mb-3">
+          <view class="text-lg font-semibold text-gray-900" style="font-size: 32rpx;">国家列表</view>
+          <view class="text-sm text-gray-600">按未读数量排序</view>
+        </view>
+        
+        <view class="space-y-3">
+          <view
+            class="card shadow-sm"
+            wx:for="{{sortedCountries}}"
+            wx:key="id"
+            bindtap="onCountryTap"
+            data-country="{{item}}"
+            style="transition: all 0.15s ease-in-out;"
+          >
+            <view class="flex justify-between items-center">
+              <view class="flex items-center flex-1">
+                <!-- 国旗 -->
+                <view style="font-size: 48rpx; margin-right: 24rpx;">{{item.flag}}</view>
+                <!-- 国家信息 -->
+                <view class="flex-1">
+                  <view style="font-weight: 600; color: #111827; font-size: 28rpx; margin-bottom: 8rpx;">{{item.name}}</view>
+                  <view style="color: #4b5563; font-size: 24rpx;">{{item.unreadCount}} 条未读消息</view>
+                </view>
+              </view>
+              <!-- 未读数量标签 -->
+              <view style="background-color: #2563eb; color: white; padding: 12rpx 24rpx; border-radius: 50rpx; min-width: 80rpx; text-align: center;">
+                <text style="font-size: 24rpx; font-weight: bold;">{{item.unreadCount}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 动态页面内容 -->
+    <view wx:elif="{{activeTab === 'feed'}}" class="tab-content">
+      <view class="container mt-4">
+        <view class="bg-red-50 rounded-lg p-3" style="border: 1rpx solid #fecaca;">
+          <view class="flex items-center">
+            <text style="font-size: 40rpx; margin-right: 16rpx;">🔥</text>
+            <view class="flex-1">
+              <view class="text-sm font-semibold" style="color: #b91c1c; font-size: 24rpx;">热门话题</view>
+            </view>
+          </view>
+          
+          <!-- 话题标签横向滚动 -->
+          <scroll-view class="topics-scroll mt-2" scroll-x>
+            <view class="space-x-2" style="display: flex;">
+              <view 
+                class="topic-tag {{selectedTopic === item ? 'topic-tag-active' : 'topic-tag-inactive'}}"
+                wx:for="{{trendingTopics}}"
+                wx:key="*this"
+                bindtap="selectTopic"
+                data-topic="{{item}}"
+              >
+                #{{item}}
+              </view>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+
+      <view class="container mt-4 mb-20">
+        <view class="text-center py-20" style="padding: 160rpx 0;">
+          <text style="color: #4b5563; font-size: 28rpx;">动态页面内容正在开发中...</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 收藏页面内容 -->
+    <view wx:elif="{{activeTab === 'bookmark'}}" class="tab-content">
+      <view class="container mt-4 mb-20">
+        <view class="text-center py-20" style="padding: 160rpx 0;">
+          <text style="font-size: 96rpx; margin-bottom: 32rpx; display: block;">⭐</text>
+          <view style="color: #111827; font-size: 32rpx; font-weight: 600; margin-bottom: 16rpx;">我的收藏</view>
+          <view style="color: #4b5563; font-size: 24rpx;">收藏页面内容正在开发中...</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 个人中心页面内容 -->
+    <view wx:elif="{{activeTab === 'profile'}}" class="tab-content">
+      <view class="container mt-4 mb-20">
+        <view class="text-center py-20" style="padding: 160rpx 0;">
+          <text style="font-size: 96rpx; margin-bottom: 32rpx; display: block;">👤</text>
+          <view style="color: #111827; font-size: 32rpx; font-weight: 600; margin-bottom: 16rpx;">个人中心</view>
+          <view style="color: #4b5563; font-size: 24rpx;">个人中心页面正在开发中...</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部导航栏 -->
+  <view class="bottom-nav">
+    <view class="flex justify-between items-center py-2" style="padding: 16rpx 0;">
+      <!-- 地图 Tab -->
+      <view 
+        class="nav-item {{activeTab === 'map' ? 'nav-item-active' : ''}}"
+        bindtap="switchTab"
+        bindtouchstart="onTabTouchStart"
+        bindtouchend="onTabTouchEnd"
+        data-tab="map"
+        data-index="0"
+      >
+        <view class="nav-icon-container">
+          <text class="nav-icon {{activeTab === 'map' ? 'icon-active' : 'icon-inactive'}}">🌍</text>
+        </view>
+        <text class="nav-label {{activeTab === 'map' ? 'text-blue-600' : 'text-gray-600'}}">地图</text>
+      </view>
+
+      <!-- 动态 Tab -->
+      <view 
+        class="nav-item {{activeTab === 'feed' ? 'nav-item-active' : ''}}"
+        bindtap="switchTab"
+        bindtouchstart="onTabTouchStart"
+        bindtouchend="onTabTouchEnd"
+        data-tab="feed"
+        data-index="1"
+      >
+        <view class="nav-icon-container">
+          <text class="nav-icon {{activeTab === 'feed' ? 'icon-active' : 'icon-inactive'}}">📋</text>
+        </view>
+        <text class="nav-label {{activeTab === 'feed' ? 'text-blue-600' : 'text-gray-600'}}">动态</text>
+      </view>
+
+      <!-- 收藏 Tab -->
+      <view 
+        class="nav-item {{activeTab === 'bookmark' ? 'nav-item-active' : ''}}"
+        bindtap="switchTab"
+        bindtouchstart="onTabTouchStart"
+        bindtouchend="onTabTouchEnd"
+        data-tab="bookmark"
+        data-index="2"
+      >
+        <view class="nav-icon-container">
+          <text class="nav-icon {{activeTab === 'bookmark' ? 'icon-active' : 'icon-inactive'}}">⭐</text>
+        </view>
+        <text class="nav-label {{activeTab === 'bookmark' ? 'text-blue-600' : 'text-gray-600'}}">收藏</text>
+      </view>
+
+      <!-- 我的 Tab -->
+      <view 
+        class="nav-item {{activeTab === 'profile' ? 'nav-item-active' : ''}}"
+        bindtap="switchTab"
+        bindtouchstart="onTabTouchStart"
+        bindtouchend="onTabTouchEnd"
+        data-tab="profile"
+        data-index="3"
+      >
+        <view class="nav-icon-container">
+          <text class="nav-icon {{activeTab === 'profile' ? 'icon-active' : 'icon-inactive'}}">👤</text>
+        </view>
+        <text class="nav-label {{activeTab === 'profile' ? 'text-blue-600' : 'text-gray-600'}}">我的</text>
+      </view>
+    </view>
+  </view>
+</view>

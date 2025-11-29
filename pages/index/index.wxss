@@ -1,0 +1,759 @@
+.page {
+  min-height: 100vh;
+  background-color: #f9fafb;
+  position: relative;
+}
+
+.container {
+  max-width: 448px;
+  margin: 0 auto;
+  padding: 0 32rpx;
+}
+
+.content-area {
+  flex: 1;
+  overflow: auto;
+}
+
+.tab-content {
+  min-height: 100vh;
+}
+
+/* 顶部标题栏 */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+}
+
+/* 统计卡片 */
+.card {
+  background-color: white;
+  border-radius: 16rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-shadow {
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 地图容器 */
+.map-container {
+  width: 100%;
+  height: 400rpx;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16rpx;
+}
+
+/* 地图内容容器 - 背景和标记的统一容器 */
+.map-content {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-origin: center center;
+  transition: transform 0.2s ease-out;
+}
+
+/* 缩放控制按钮 */
+.zoom-controls {
+  position: absolute;
+  top: 20rpx;
+  left: 20rpx;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.zoom-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #2563eb;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.15);
+  transition: all 0.15s ease-in-out;
+  backdrop-filter: blur(10rpx);
+}
+
+.zoom-btn:active {
+  transform: scale(0.9);
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.zoom-in {
+  background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+}
+
+.zoom-out {
+  background: linear-gradient(135deg, #fee2e2, #fecaca);
+}
+
+.zoom-reset {
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+}
+
+.world-map {
+  width: 100%;
+  height: 100%;
+  background: 
+    /* 海洋背景 */
+    radial-gradient(circle at 30% 40%, rgba(14, 165, 233, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+    /* 主背景渐变 */
+    linear-gradient(135deg, #eff6ff 0%, #dbeafe 40%, #bfdbfe 60%, #93c5fd 100%);
+  position: relative;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.world-map::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    /* 经纬线网格 */
+    repeating-linear-gradient(
+      0deg,
+      rgba(59, 130, 246, 0.05) 0px,
+      transparent 2px,
+      transparent 40px,
+      rgba(59, 130, 246, 0.05) 40px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(59, 130, 246, 0.05) 0px,
+      transparent 2px,
+      transparent 40px,
+      rgba(59, 130, 246, 0.05) 40px
+    );
+  pointer-events: none;
+}
+
+.world-map-icon {
+  position: absolute;
+  top: 20rpx;
+  right: 20rpx;
+  font-size: 48rpx;
+  opacity: 0.3;
+  color: #3b82f6;
+  pointer-events: none;
+  z-index: 5;
+  text-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 世界地图轮廓 */
+.map-outline {
+  position: absolute;
+  inset: 0;
+  opacity: 0.3;
+}
+
+.continent {
+  position: absolute;
+  border-radius: 8rpx;
+  opacity: 0.8;
+  box-shadow: 0 4rpx 12rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+.continent:hover {
+  opacity: 0.95;
+  transform: scale(1.02);
+}
+
+/* 北美洲 - 更真实的形状 */
+.continent-north-america {
+  width: 200rpx;
+  height: 140rpx;
+  top: 18%;
+  left: 12%;
+  background: linear-gradient(135deg, #4ade80 0%, #22c55e 50%, #16a34a 100%);
+  border-radius: 60rpx 40rpx 60rpx 80rpx;
+  transform: rotate(-8deg);
+  box-shadow: 
+    0 8rpx 20rpx rgba(34, 197, 94, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.continent-north-america::after {
+  content: '';
+  position: absolute;
+  top: 70%;
+  left: 60%;
+  width: 80rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #86efac, #4ade80);
+  border-radius: 40rpx;
+  transform: rotate(15deg);
+}
+
+/* 南美洲 */
+.continent-south-america {
+  width: 100rpx;
+  height: 160rpx;
+  top: 45%;
+  left: 22%;
+  background: linear-gradient(135deg, #86efac 0%, #4ade80 50%, #22c55e 100%);
+  border-radius: 50rpx 30rpx 40rpx 60rpx;
+  transform: rotate(-3deg);
+  box-shadow: 
+    0 8rpx 20rpx rgba(74, 222, 128, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 欧洲 */
+.continent-europe {
+  width: 160rpx;
+  height: 120rpx;
+  top: 10%;
+  left: 42%;
+  background: linear-gradient(135deg, #fde68a 0%, #fbbf24 50%, #f59e0b 100%);
+  border-radius: 40rpx 50rpx 30rpx 60rpx;
+  box-shadow: 
+    0 8rpx 20rpx rgba(251, 191, 36, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.continent-europe::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 60%;
+  width: 50rpx;
+  height: 40rpx;
+  background: linear-gradient(135deg, #fcd34d, #fbbf24);
+  border-radius: 25rpx;
+  transform: rotate(-10deg);
+  box-shadow: 0 4rpx 12rpx rgba(245, 158, 11, 0.3);
+}
+
+.continent-europe::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 75%;
+  width: 40rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #fde68a, #fcd34d);
+  border-radius: 20rpx;
+  transform: rotate(15deg);
+  box-shadow: 0 4rpx 12rpx rgba(245, 158, 11, 0.3);
+}
+
+/* 非洲 */
+.continent-africa {
+  width: 140rpx;
+  height: 180rpx;
+  top: 35%;
+  left: 45%;
+  background: linear-gradient(135deg, #fcd34d 0%, #f59e0b 50%, #d97706 100%);
+  border-radius: 60rpx 50rpx 70rpx 60rpx;
+  transform: rotate(5deg);
+  box-shadow: 
+    0 8rpx 20rpx rgba(245, 158, 11, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+/* 亚洲 */
+.continent-asia {
+  width: 260rpx;
+  height: 160rpx;
+  top: 15%;
+  left: 55%;
+  background: linear-gradient(135deg, #f87171 0%, #ef4444 50%, #dc2626 100%);
+  border-radius: 80rpx 60rpx 70rpx 90rpx;
+  transform: rotate(-2deg);
+  box-shadow: 
+    0 8rpx 20rpx rgba(239, 68, 68, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.continent-asia::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 10%;
+  width: 100rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #fca5a5, #f87171);
+  border-radius: 40rpx;
+  transform: rotate(-15deg);
+}
+
+.continent-asia::after {
+  content: '';
+  position: absolute;
+  top: 60%;
+  left: 60%;
+  width: 80rpx;
+  height: 60rpx;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-radius: 30rpx;
+  transform: rotate(20deg);
+}
+
+/* 大洋洲 */
+.continent-oceania {
+  width: 120rpx;
+  height: 80rpx;
+  top: 62%;
+  left: 68%;
+  background: linear-gradient(135deg, #c084fc 0%, #a855f7 50%, #9333ea 100%);
+  border-radius: 40rpx 60rpx 30rpx 50rpx;
+  transform: rotate(8deg);
+  box-shadow: 
+    0 8rpx 20rpx rgba(168, 85, 247, 0.3),
+    inset 0 -4rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.continent-oceania::after {
+  content: '';
+  position: absolute;
+  top: 30%;
+  left: 60%;
+  width: 40rpx;
+  height: 30rpx;
+  background: linear-gradient(135deg, #d8b4fe, #c084fc);
+  border-radius: 20rpx;
+}
+
+/* 标记层 */
+.markers-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+.country-marker {
+  position: absolute;
+  transform: translate(-50%, -50%) scale(calc(1 / var(--map-scale, 1)));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 脉冲动画 */
+.marker-pulse {
+  position: absolute;
+  width: 64rpx;
+  height: 64rpx;
+  background-color: rgba(37, 99, 235, 0.4);
+  border-radius: 32rpx;
+  transform: scale(calc(1 / var(--map-scale, 1)));
+}
+
+/* 脉冲动画 */
+.ping-animation {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* 标记点 */
+.marker-dot {
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  width: 80rpx;
+  height: 80rpx;
+  background-color: #2563eb;
+  border-radius: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8rpx 20rpx rgba(37, 99, 235, 0.3);
+  border: 4rpx solid rgba(255, 255, 255, 0.8);
+  min-width: 80rpx;
+  min-height: 80rpx;
+  transform: scale(calc(1 / var(--map-scale, 1)));
+}
+
+/* 地图放大时标记点保持固定大小，仅调整间距 */
+/* 移除了标记点大小变化，保持统一的80rpx大小 */
+
+/* 地图放大时标记点智能间距调整 - 避免重叠 */
+.map-container[data-scale="1.6"] .country-marker:nth-child(2) {
+  transform: translate(-50%, -50%) translateX(15rpx);
+}
+
+.map-container[data-scale="1.8"] .country-marker:nth-child(2) {
+  transform: translate(-50%, -50%) translateX(25rpx);
+}
+
+.map-container[data-scale="2"] .country-marker:nth-child(2),
+.map-container[data-scale="2.2"] .country-marker:nth-child(2) {
+  transform: translate(-50%, -50%) translateX(35rpx);
+}
+
+.map-container[data-scale="2.4"] .country-marker:nth-child(2),
+.map-container[data-scale="2.6"] .country-marker:nth-child(2) {
+  transform: translate(-50%, -50%) translateX(45rpx);
+}
+
+.map-container[data-scale="2.8"] .country-marker:nth-child(2),
+.map-container[data-scale="3"] .country-marker:nth-child(2) {
+  transform: translate(-50%, -50%) translateX(55rpx);
+}
+
+/* 第3个标记点的Y轴偏移 */
+.map-container[data-scale="1.8"] .country-marker:nth-child(3) {
+  transform: translate(-50%, -50%) translateY(20rpx);
+}
+
+.map-container[data-scale="2"] .country-marker:nth-child(3),
+.map-container[data-scale="2.2"] .country-marker:nth-child(3) {
+  transform: translate(-50%, -50%) translateY(35rpx);
+}
+
+.map-container[data-scale="2.4"] .country-marker:nth-child(3),
+.map-container[data-scale="2.6"] .country-marker:nth-child(3) {
+  transform: translate(-50%, -50%) translateY(50rpx);
+}
+
+.map-container[data-scale="2.8"] .country-marker:nth-child(3),
+.map-container[data-scale="3"] .country-marker:nth-child(3) {
+  transform: translate(-50%, -50%) translateY(65rpx);
+}
+
+/* 第4个标记点的对角偏移 */
+.map-container[data-scale="2"] .country-marker:nth-child(4) {
+  transform: translate(-50%, -50%) translateX(25rpx) translateY(25rpx);
+}
+
+.map-container[data-scale="2.4"] .country-marker:nth-child(4) {
+  transform: translate(-50%, -50%) translateX(35rpx) translateY(35rpx);
+}
+
+.map-container[data-scale="2.8"] .country-marker:nth-child(4),
+.map-container[data-scale="3"] .country-marker:nth-child(4) {
+  transform: translate(-50%, -50%) translateX(45rpx) translateY(45rpx);
+}
+
+/* 第5个和第6个标记点的反向偏移 */
+.map-container[data-scale="2.2"] .country-marker:nth-child(5) {
+  transform: translate(-50%, -50%) translateX(-30rpx);
+}
+
+.map-container[data-scale="2.6"] .country-marker:nth-child(5) {
+  transform: translate(-50%, -50%) translateX(-40rpx);
+}
+
+.map-container[data-scale="3"] .country-marker:nth-child(5) {
+  transform: translate(-50%, -50%) translateX(-50rpx);
+}
+
+.map-container[data-scale="2.4"] .country-marker:nth-child(6) {
+  transform: translate(-50%, -50%) translateX(-30rpx) translateY(30rpx);
+}
+
+.map-container[data-scale="2.8"] .country-marker:nth-child(6) {
+  transform: translate(-50%, -50%) translateX(-40rpx) translateY(40rpx);
+}
+
+.map-container[data-scale="3"] .country-marker:nth-child(6) {
+  transform: translate(-50%, -50%) translateX(-50rpx) translateY(50rpx);
+}
+
+.country-marker-tap .marker-dot {
+  transform: scale(1.1);
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+}
+
+.marker-tooltip {
+  pointer-events: none;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease-in-out;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-size: 20rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 8rpx;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8rpx;
+}
+
+.country-marker-tap .marker-tooltip {
+  opacity: 1;
+}
+
+/* 话题标签 */
+.topic-tag {
+  display: inline-block;
+  padding: 12rpx 20rpx;
+  border-radius: 20rpx;
+  font-size: 24rpx;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.15s ease-in-out;
+  border: 2rpx solid transparent;
+}
+
+.topic-tag-active {
+  background-color: #ef4444;
+  color: white;
+}
+
+.topic-tag-inactive {
+  background-color: white;
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+/* 热门话题栏 */
+.topics-scroll {
+  white-space: nowrap;
+}
+
+/* 底部导航栏 */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  border-top: 1rpx solid #e5e7eb;
+  z-index: 40;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12rpx 20rpx;
+  transition: all 0.15s ease-in-out;
+  border-radius: 12rpx;
+  margin: 4rpx;
+  min-width: 100rpx;
+}
+
+.nav-item-tap {
+  background-color: #eff6ff;
+}
+
+.nav-item-active {
+  background-color: #eff6ff;
+}
+
+.nav-icon-container {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4rpx;
+  transition: transform 0.15s ease-in-out;
+}
+
+.nav-item-tap .nav-icon-container {
+  transform: scale(0.9);
+}
+
+.nav-icon {
+  font-size: 48rpx;
+  line-height: 1;
+  transition: all 0.15s ease-in-out;
+}
+
+.icon-active {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.icon-inactive {
+  opacity: 0.6;
+}
+
+.nav-label {
+  font-size: 24rpx;
+  font-weight: 500;
+  transition: all 0.15s ease-in-out;
+  white-space: nowrap;
+}
+
+/* 布局工具类 */
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+/* 间距工具类 */
+.py-4 {
+  padding-top: 32rpx;
+  padding-bottom: 32rpx;
+}
+
+.mt-1 {
+  margin-top: 8rpx;
+}
+
+.mt-4 {
+  margin-top: 32rpx;
+}
+
+.mr-2 {
+  margin-right: 16rpx;
+}
+
+.mr-3 {
+  margin-right: 24rpx;
+}
+
+/* 色彩工具类 */
+.bg-blue-600 {
+  background-color: #2563eb;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}
+
+.text-blue-100 {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.bg-blue-100 {
+  background-color: #dbeafe;
+}
+
+.bg-green-100 {
+  background-color: #dcfce7;
+}
+
+.text-green-600 {
+  color: #16a34a;
+}
+
+.bg-red-50 {
+  background-color: #fef2f2;
+}
+
+.text-red-500 {
+  color: #ef4444;
+}
+
+.text-red-700 {
+  color: #b91c1c;
+}
+
+.bg-white {
+  background-color: white;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.text-gray-900 {
+  color: #111827;
+}
+
+/* 字体工具类 */
+.text-xs {
+  font-size: 20rpx;
+}
+
+.text-sm {
+  font-size: 24rpx;
+}
+
+.text-xl {
+  font-size: 36rpx;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* 圆角工具类 */
+.rounded-full {
+  border-radius: 9999rpx;
+}
+
+/* 阴影工具类 */
+.shadow-sm {
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 动画 */
+.tab-content {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 话题栏背景 */
+.border-red-200 {
+  border-color: #fecaca;
+}
+
+.rounded-lg {
+  border-radius: 16rpx;
+}
+
+.p-3 {
+  padding: 24rpx;
+}
+
+.space-x-2 > view + view {
+  margin-left: 16rpx;
+}
+
+.space-y-3 > view + view {
+  margin-top: 24rpx;
+}

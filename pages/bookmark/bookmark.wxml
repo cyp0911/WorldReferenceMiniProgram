@@ -1,0 +1,140 @@
+<view class="page">
+  <!-- 顶部统计区域 -->
+  <view class="header-section">
+    <!-- 顶部标题栏 -->
+    <view class="header bg-blue-600 text-white">
+      <view class="container">
+        <view class="py-4">
+          <view class="text-xl font-bold text-center">我的收藏</view>
+          <view class="text-sm text-blue-100 text-center mt-1">精选内容推荐</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 统计卡片 -->
+    <view class="container">
+      <view class="stats-card bg-white rounded-lg shadow-lg mx-4 -mt-6 p-4 relative z-10">
+        <view class="flex items-center justify-between">
+          <view class="flex items-center">
+            <text class="text-3xl mr-3">⭐</text>
+            <view>
+              <view class="text-2xl font-bold text-gray-900">{{totalBookmarks}}</view>
+              <view class="text-sm text-gray-600">总收藏数</view>
+            </view>
+          </view>
+          <view class="flex items-center space-x-4">
+            <view class="text-center">
+              <view class="text-lg font-semibold text-blue-600">{{todayBookmarks}}</view>
+              <view class="text-xs text-gray-500">今日新增</view>
+            </view>
+            <view class="text-center">
+              <view class="text-lg font-semibold text-green-600">{{weekBookmarks}}</view>
+              <view class="text-xs text-gray-500">本周新增</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 收藏列表 -->
+  <view class="container mt-6 mb-20">
+    <!-- 空状态 -->
+    <view wx:if="{{bookmarks.length === 0}}" class="empty-state text-center py-20">
+      <text class="text-6xl mb-4 block">⭐</text>
+      <view class="text-gray-900 text-lg font-semibold mb-2">暂无收藏内容</view>
+      <view class="text-gray-600 text-sm mb-4">点击新闻卡片上的收藏按钮即可收藏</view>
+      <button 
+        class="bg-blue-600 text-white px-6 py-2 rounded-full text-sm"
+        bindtap="goToFeed"
+      >
+        去发现内容
+      </button>
+    </view>
+
+    <!-- 收藏列表 -->
+    <view wx:else class="space-y-4">
+      <view 
+        class="bookmark-card bg-white rounded-lg shadow-sm overflow-hidden"
+        wx:for="{{bookmarks}}"
+        wx:key="id"
+      >
+        <view class="p-4">
+          <!-- 顶部信息行 -->
+          <view class="flex items-center justify-between mb-3">
+            <view class="flex items-center">
+              <text class="text-xl mr-2">{{item.countryFlag}}</text>
+              <text class="text-sm text-gray-600 mr-2">{{item.country}}</text>
+              <view class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded">{{item.category}}</view>
+            </view>
+            <view class="flex items-center">
+              <text class="text-xs text-gray-500 mr-2">{{item.savedAt}}</text>
+            </view>
+          </view>
+          
+          <!-- 标题和缩略图 -->
+          <view class="flex items-start mb-3">
+            <view class="flex-1 mr-3">
+              <view class="text-gray-900 font-medium mb-2 line-clamp-2">
+                {{item.title}}
+              </view>
+              <view class="flex items-center">
+                <text class="text-lg mr-2">{{item.sourceLogo}}</text>
+                <text class="text-sm text-gray-700">{{item.source}}</text>
+                <text class="text-sm text-gray-500 ml-2">{{item.time}}</text>
+              </view>
+            </view>
+            <image 
+              wx:if="{{item.image}}" 
+              src="{{item.image}}" 
+              class="w-24 h-16 rounded object-cover"
+              mode="aspectFill"
+            />
+          </view>
+          
+          <!-- 底部操作栏 -->
+          <view class="flex items-center justify-between pt-3 border-t border-gray-100">
+            <view class="flex items-center space-x-4">
+              <view class="flex items-center text-gray-600">
+                <text class="text-sm mr-1">👁</text>
+                <text class="text-sm">{{item.views}}</text>
+              </view>
+              <view class="flex items-center text-blue-600">
+                <text class="text-sm mr-1">⭐</text>
+                <text class="text-sm">已收藏</text>
+              </view>
+            </view>
+            
+            <!-- 操作按钮 -->
+            <view class="flex items-center space-x-3">
+              <view 
+                class="text-gray-600 text-sm"
+                bindtap="shareBookmark"
+                data-bookmark="{{item}}"
+              >
+                <text>分享</text>
+              </view>
+              <view 
+                class="text-red-500 text-sm"
+                bindtap="removeBookmark"
+                data-id="{{item.id}}"
+              >
+                <text>🗑️ 移除</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="text-center mt-6 mb-8" wx:if="{{bookmarks.length > 0 && hasMore}}">
+      <button 
+        class="load-more-btn bg-gray-100 text-gray-700 px-6 py-2 rounded-full text-sm"
+        bindtap="loadMore"
+      >
+        加载更多
+      </button>
+    </view>
+  </view>
+</view>
